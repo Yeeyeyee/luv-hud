@@ -16,11 +16,11 @@ function getParams() {
         time: p.get("time") || "00:00",
 
         chars: parseList("char"),
-        hps: parseList("char_hp").map(n => Number(n)),
-        loves: parseList("char_love").map(n => Number(n)),
-        socials: parseList("char_social").map(n => Number(n)),
-        loc: parseList("loc"),
-        actions: parseList("char_action")
+        hps: parseList("char_hp").map(n => Number(n) || 0),
+        loves: parseList("char_love").map(n => Number(n) || 0),
+        socials: parseList("char_social").map(n => Number(n) || 0),
+        actions: parseList("char_action"),
+        locs: parseList("loc")
     };
 }
 
@@ -29,25 +29,23 @@ function renderTopHUD(data) {
     if (!hudTop) return;
 
     hudTop.innerHTML = `
-        <div class="player-info">
+        <div>
             <div class="player-name">♡ ${data.player}</div>
             <div class="tag">💲${data.money}</div>
             <div class="tag">${data.outfit}</div>
         </div>
 
-        <div class="time-info">
-            <div class="d-day">📅 D-${data.dday}</div>
-            <div class="date-loc">
-                ${data.date} | ${data.time} | ${data.room}
-            </div>
+        <div style="text-align:right">
+            <div>📅 D-${data.dday}</div>
+            <div>${data.date} | ${data.time}</div>
+            <div>${data.room}</div>
         </div>
     `;
 }
 
 function createBar(value, max, color1, color2) {
     const percent = Math.max(0, Math.min((value / max) * 100, 100));
-
-    const gradId = `grad-${color1.replace("#","")}-${Math.random()}`;
+    const gradId = "grad" + Math.floor(Math.random() * 1000000);
 
     return `
     <svg viewBox="0 0 100 10" preserveAspectRatio="none">
@@ -62,10 +60,7 @@ function createBar(value, max, color1, color2) {
     </svg>`;
 }
 
-function renderHUD() {
-    const data = getParams();
-    renderTopHUD(data);
-
+function renderCharacters(data) {
     const container = document.getElementById("hud-characters");
     if (!container) return;
 
@@ -76,30 +71,30 @@ function renderHUD() {
         const hp = data.hps[i] ?? 0;
         const love = data.loves[i] ?? 0;
         const social = data.socials[i] ?? 0;
-        const location = data.loc[i] || "위치 미정";
         const action = data.actions[i] ?? "";
+        const loc = data.locs[i] ?? "";
 
         const loveClass = love >= 80 ? "love-max" : "";
         const deadClass = hp <= 0 ? "dead" : "";
 
         html += `
             <div class="char-card ${deadClass}">
-                <div class="char-header">
-                    <span class="char-name ${loveClass}">${name}</span>
+                <div class="char-name ${loveClass}">
+                    ${name} ${loc ? `| ${loc}` : ""}
                 </div>
 
                 <div class="char-action">「${action}」</div>
 
                 <div class="stat-row">
-                    ❤️ ${createBar(love, 100, '#ff9a9e', '#fecfef')} ${love}
+                    ❤️ ${createBar(love,100,'#ff9a9e','#fecfef')} ${love}
                 </div>
 
                 <div class="stat-row">
-                    💟 ${createBar(hp, 100, '#ff4e50', '#f9d423')} ${hp}
+                    💟 ${createBar(hp,100,'#ff4e50','#f9d423')} ${hp}
                 </div>
 
                 <div class="stat-row">
-                    🧩 ${createBar(social, 100, '#454545', '#42b746')} ${social}
+                    🧩 ${createBar(social,100,'#454545','#42b746')} ${social}
                 </div>
             </div>
         `;
@@ -108,5 +103,10 @@ function renderHUD() {
     container.innerHTML = html;
 }
 
+function renderHUD() {
+    const data = getParams();
+    renderTopHUD(data);
+    renderCharacters(data);
+}
 
 renderHUD();
