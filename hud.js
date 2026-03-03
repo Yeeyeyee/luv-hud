@@ -109,4 +109,7 @@ function renderHUD() {
     renderCharacters(data);
 }
 
-renderHUD();
+document.addEventListener("DOMContentLoaded", () => {
+    renderHUD();
+});
+
