@@ -65,7 +65,9 @@ function createBar(value, max, color1, color2) {
 function renderHUD() {
     const data = getParams();
     renderTopHUD(data);
+
     const container = document.getElementById("hud-characters");
+    if (!container) return;
 
     let html = "";
 
@@ -105,5 +107,6 @@ function renderHUD() {
 
     container.innerHTML = html;
 }
+
 
 renderHUD();
