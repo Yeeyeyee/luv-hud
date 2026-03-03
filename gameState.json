@@ -1,0 +1,25 @@
+{
+  "maxStat": 100,
+  "player": {
+    "name": "user",
+    "money": 0,
+    "outfit": "검정 셔츠와 바지",
+    "location": "부엌"
+  },
+  "time": {
+    "date": "2025.02.10.[화]",
+    "clock": "08:05",
+    "dday": 14
+  },
+  "characters": [
+    {
+      "name": "머그",
+      "hp": 80,
+      "love": 10,
+      "social": 0,
+      "outfit": "민트색 후드티",
+      "location": "부엌",
+      "action": "user를 걱정하며 바라보고 있다."
+    }
+  ]
+}
